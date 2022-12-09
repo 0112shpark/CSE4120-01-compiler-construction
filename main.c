@@ -8,7 +8,7 @@
 #include "globals.h"
 
 /* set NO_PARSE to TRUE to get a scanner-only compiler */
-#define NO_PARSE FALSE
+#define NO_PARSE TRUE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
 #define NO_ANALYZE FALSE
 
@@ -67,7 +67,7 @@ main( int argc, char * argv[] )
   str1 = strtok(temp,".");
   //printf("%s",temp);
   strcat(str1, open_file);
-  //listing = fopen("hw1_20181632_txt","w"); /* send listing to screen */
+  listing = fopen(str1,"w"); /* send listing to screen */
   fprintf(listing,"\nTINY COMPILATION: %s\n",pgm);
 #if NO_PARSE
   fprintf(listing,"line number\ttoken\tlexeme\n");

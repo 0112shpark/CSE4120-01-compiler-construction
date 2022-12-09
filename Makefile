@@ -9,7 +9,7 @@ C = gcc
 CFLAGS = -std=gnu99 
 
 OBJS = main.o util.o parse.o symtab.o analyze.o code.o cgen.o lex.yy.o
-TARGET = hw1_binary
+TARGET = hw2_binary
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) -lfl
