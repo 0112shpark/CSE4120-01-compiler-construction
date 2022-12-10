@@ -13,9 +13,16 @@ Syntax tree:
         Compound statment
             Assign : =
                 Variable : a
-                Multiple Expression
+                Addictive Expression
                     Variable: a
-                    Operator: *
-                    Constant: 1
                     Operator: +
-                    Constant: 3
+                    Constant: 1
+                    Multiple Expression
+                        Operator: *
+                        Constant: 4
+                        Addictive Expression
+                            Operator: +
+                            Constant: 46
+                            Multiple Expression
+                                Operator: /
+                                Variable: k

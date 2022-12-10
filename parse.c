@@ -41,6 +41,7 @@ static TreeNode * add_oper(void);
 static TreeNode * add_op(void);
 static TreeNode * mul_op(void);
 int flag =0;
+int add_mul_flag = 0;
 static void syntaxError(char * message)
 { //fprintf(listing,"\n>>> ");
   fprintf(listing,"Syntax error at line %d: %s",lineno,message);
@@ -224,14 +225,14 @@ TreeNode * add_oper(void){
       t->attr.name = name;
     }
     else if((token == PLUS)||(token ==MINUS)){
-      //match(token);
+      add_mul_flag = 0;
       t = newExpNode(AddIK);
       t->attr.name = name;
       q = add_op();
       t->sibling = q;
     }
     else if((token == TIMES)||(token ==OVER)){
-      //match(token);
+      add_mul_flag = 1;
       t = newExpNode(MulIK);
       t->attr.name = name;
       q = mul_op();
@@ -271,11 +272,16 @@ TreeNode * add_oper(void){
 }
 TreeNode * add_op(void){
   TreeNode * t;
+  TreeNode *q;
   if(token == LPAREN) match(LPAREN);
   if(token == RPAREN) match(RPAREN);
   if((flag ==0) && ((token == PLUS)||(token ==MINUS))){
+   
     t = newExpNode(OpK);
     t->attr.op = token;
+    printf("%d\n", add_mul_flag);
+    if(add_mul_flag) t->type = MtA;
+    add_mul_flag = 0;
     match(token);
     if(token!= SEMI){
       flag = 1;
@@ -316,11 +322,16 @@ TreeNode * add_op(void){
 
 TreeNode * mul_op(void){
   TreeNode * t;
+  TreeNode *q;
   if(token == LPAREN) match(LPAREN);
   if(token == RPAREN) match(RPAREN);
   if((flag ==0) && ((token == TIMES)||(token ==OVER))){
+    
+    
     t = newExpNode(OpK);
     t->attr.op = token;
+    if(!add_mul_flag) t->type = AtM;
+    add_mul_flag = 1;
     match(token);
     if(token!= SEMI){
       flag = 1;

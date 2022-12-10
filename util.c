@@ -196,6 +196,19 @@ void printTree( TreeNode * tree )
     { switch (tree->kind.exp) {
         case OpK:
           //printSpaces();
+          switch(tree->type){
+            case MtA:
+              fprintf(listing,"Addictive Expression\n");
+              INDENT;
+              printSpaces();
+              break;
+            case AtM:
+              fprintf(listing,"Multiple Expression\n");
+              INDENT;
+              printSpaces();
+              break;
+          }
+          //printSpaces();
           fprintf(listing,"Operator: ");
           if(tree->attr.op == PLUS){
             fprintf(listing,"+\n");
