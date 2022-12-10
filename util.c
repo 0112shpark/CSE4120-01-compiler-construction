@@ -187,6 +187,10 @@ void printTree( TreeNode * tree )
         case CompK:
           fprintf(listing, "Compound statment\n");
           break;
+        case ReturnK:
+          //printSpaces();
+          fprintf(listing,"Return Statement :\n");
+          break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
           break;
@@ -198,17 +202,26 @@ void printTree( TreeNode * tree )
           //printSpaces();
           switch(tree->type){
             case MtA:
+              
               fprintf(listing,"Addictive Expression\n");
-              INDENT;
+              //INDENT;
               printSpaces();
+              //UNINDENT;
               break;
             case AtM:
+              
               fprintf(listing,"Multiple Expression\n");
-              INDENT;
+              //INDENT;
               printSpaces();
+              //UNINDENT;
+              break;
+            default:
+              
+              //printSpaces();
+              //UNINDENT;
               break;
           }
-          //printSpaces();
+       
           fprintf(listing,"Operator: ");
           if(tree->attr.op == PLUS){
             fprintf(listing,"+\n");
@@ -225,13 +238,16 @@ void printTree( TreeNode * tree )
           //printToken(tree->attr.op,"\0");
           break;
         case ConstK:
+          //INDENT;
           //printSpaces();
           fprintf(listing,"Constant: %d\n",tree->attr.val);
+          //UNINDENT;
           break;
         case IdK:
           //printSpaces();
           fprintf(listing,"Variable: %s\n",tree->attr.name);
           break;
+        
         case VarK:
           fprintf(listing, "Variable Declaration: %s\n", tree->attr.name);
           INDENT;
@@ -277,7 +293,7 @@ void printTree( TreeNode * tree )
         case AddIK:
           //printSpaces();
           fprintf(listing, "Addictive Expression\n");
-          INDENT;
+          //INDENT;
           printSpaces();
           fprintf(listing, "Variable: %s\n", tree->attr.name);
           //UNINDENT;
@@ -285,7 +301,7 @@ void printTree( TreeNode * tree )
         case AddCK:
           //printSpaces();
           fprintf(listing, "Addictive Expression\n");
-          INDENT;
+          //INDENT;
           printSpaces();
           fprintf(listing, "Constant: %d\n", tree->attr.val);
           //UNINDENT;
@@ -293,7 +309,7 @@ void printTree( TreeNode * tree )
         case MulIK:
           //printSpaces();
           fprintf(listing, "Multiple Expression\n");
-          INDENT;
+          //INDENT;
           printSpaces();
           fprintf(listing, "Variable: %s\n", tree->attr.name);
           //UNINDENT;
@@ -301,9 +317,38 @@ void printTree( TreeNode * tree )
         case MulCK:
           //printSpaces();
           fprintf(listing, "Mulpiple Expression\n");
-          INDENT;
+          //INDENT;
           printSpaces();
           fprintf(listing, "Constant: %d\n", tree->attr.val);
+          //UNINDENT;
+          break;
+        case SimpK:
+          //printSpaces();
+          fprintf(listing, "Simple Expression\n");
+          //INDENT;
+          printSpaces();
+          fprintf(listing, "Operator: ");
+          switch(tree->attr.op){
+              case LT : 
+                fprintf(listing,">\n");
+                break;
+              case RT : 
+                fprintf(listing,"<\n");
+                break;
+              case LEQ : 
+                fprintf(listing,"<=\n");
+                break;
+              case REQ : 
+                fprintf(listing,">=\n");
+                break;
+              case ASSIGN : 
+                fprintf(listing,"==\n");
+                break;
+              case NEQ : 
+                fprintf(listing,"!=\n");
+                break;
+          }
+          
           //UNINDENT;
           break;
         default:

@@ -31,7 +31,7 @@ static TreeNode *local_declare(void);
 static TreeNode *stmt_declare(void);
 static TreeNode *call(void);
 static TreeNode *args(void);
-static TreeNode *simple_exp(TreeNode* g);
+static TreeNode *simple_exp(void);
 static TreeNode *ret_stmt(void);
 static TreeNode *exp_list(void);
 static TreeNode *stmt_list(void);
@@ -40,6 +40,7 @@ static TreeNode *tempa(void);
 static TreeNode * add_oper(void);
 static TreeNode * add_op(void);
 static TreeNode * mul_op(void);
+static TreeNode * sim_op(void);
 int flag =0;
 int add_mul_flag = 0;
 static void syntaxError(char * message)
@@ -131,7 +132,6 @@ TreeNode * statement(void)
     t->type = type;
     match(LPAREN);
     t->child[0] = param();
-    printf("Aa");
     match(RPAREN);
     t->child[1] = compound();
   }
@@ -185,11 +185,9 @@ TreeNode *param(void){
 TreeNode *compound(void){
   TreeNode * t = newStmtNode(CompK);
   match(LBRAC);
-  printf("S");
   t->child[0] = local_declare();
-  printf("123");
-  t->child[1] = stmt_declare();
-  match(SEMI);
+  t->child[1] = stmt_list();
+  //match(SEMI);
   match(RBRAC);
   return t;
 }
@@ -207,6 +205,8 @@ TreeNode *tempa(void){
       match(EQ);
       t->child[0] = add_oper();
     }
+    
+    
   }
  return t;
 }
@@ -238,6 +238,12 @@ TreeNode * add_oper(void){
       q = mul_op();
       t->sibling = q;
     }
+    else if((token==LT)||(token==ASSIGN)||(token == RT)||(token == REQ)||(token == LEQ)||(token == NEQ)){
+      t = newExpNode(SimpK);
+      t->attr.op = token;
+      q = sim_op();
+      t->sibling = q;
+    }
   }
   else if(token == NUM){
     int temp = atoi(tokenString);
@@ -265,9 +271,34 @@ TreeNode * add_oper(void){
   }
   else{
       syntaxError("syntax error\n");
-      fprintf(listing,"Current token: \t");
+      fprintf(listing,"add- Current token: \t");
       printToken(TOKENERR,tokenString);
   } 
+  return t;
+}
+TreeNode * sim_op(void){
+  TreeNode * t= NULL;
+  match(token);
+  if(token == NUM){
+    t = newExpNode(ConstK);
+    t->attr.val = atoi(tokenString);
+    match(token);
+    if(token!= SEMI){
+      add_mul_flag = 2;
+      if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
+      else t->sibling = add_op();
+    }
+  }
+ else if(token == ID){
+    t = newExpNode(IdK);
+    t->attr.name = copyString(tokenString);
+    match(token);
+    if(token!= SEMI){
+      add_mul_flag = 2;
+      if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
+      else t->sibling = add_op();
+    }
+  }
   return t;
 }
 TreeNode * add_op(void){
@@ -279,37 +310,42 @@ TreeNode * add_op(void){
    
     t = newExpNode(OpK);
     t->attr.op = token;
-    printf("%d\n", add_mul_flag);
-    if(add_mul_flag) t->type = MtA;
+    if(add_mul_flag == 2 ||add_mul_flag) t->type = MtA;
     add_mul_flag = 0;
     match(token);
+    flag = 1;
     if(token!= SEMI){
       flag = 1;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
       else t->sibling = add_op();
     }
+    
   }
   else if(token == ID && flag == 1){
     t = newExpNode(IdK);
     t->attr.name = copyString(tokenString);
     match(token);
     if(token == RPAREN) match(RPAREN);
+    flag = 0;
     if(token!= SEMI){
       flag = 0;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
       else t->sibling = add_op();
     }
+    
   }
   else if(token == NUM && flag == 1){
     t = newExpNode(ConstK);
     t->attr.val = atoi(tokenString);
     match(token);
     if(token == RPAREN) match(RPAREN);
+    flag = 0;
     if(token!= SEMI){
       flag = 0;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
       else t->sibling = add_op();
     }
+    
     
   }
   else{
@@ -330,7 +366,7 @@ TreeNode * mul_op(void){
     
     t = newExpNode(OpK);
     t->attr.op = token;
-    if(!add_mul_flag) t->type = AtM;
+    if(add_mul_flag == 2 ||!add_mul_flag) t->type = AtM;
     add_mul_flag = 1;
     match(token);
     if(token!= SEMI){
@@ -363,7 +399,7 @@ TreeNode * mul_op(void){
   }
   else{
      syntaxError("syntax error\n");
-      fprintf(listing,"Current token: \t");
+      fprintf(listing,"mul- Current token: \t");
       printToken(TOKENERR,tokenString);
   }
   return t;
@@ -429,14 +465,15 @@ TreeNode * local_declare(void){
 
 }
 TreeNode *stmt_list(void){
-  TreeNode * t;
-  printf("D");
+  TreeNode * t = NULL;
+
   if(token == RBRAC) return NULL;
 
   t = stmt_declare();
   TreeNode * p = t;
   while (token != RBRAC)
   { TreeNode * q;
+    //match(SEMI);
     q = stmt_declare();
     //if(ERROR) return;
     if (q!=NULL) {
@@ -450,30 +487,35 @@ TreeNode *stmt_list(void){
   return t;
 }
 TreeNode *stmt_declare(void){
-  TreeNode * t;
+  TreeNode * t=NULL;
   switch(token){
     case WHILE:
       t = repeat_stmt();
       break;
     case IF:
       t = if_stmt();
+      printf("fin");
+      match(SEMI);
       break;
     case RETURN:
       t = ret_stmt();
       break;
     case LBRAC:
       t = compound();
+      match(SEMI);
       break;
     case ID:
       t = tempa();
+      match(SEMI);
       break;
     default:
       syntaxError("syntax error\n");
-      fprintf(listing,"Current token: \t");
+      fprintf(listing,"stCurrent token: \t");
       printToken(TOKENERR,tokenString);
       token = getToken();
       break;
   }
+  
   return t;
 }
 TreeNode * ret_stmt(void){
@@ -481,7 +523,7 @@ TreeNode * ret_stmt(void){
 
   match(RETURN);
   if(token != SEMI){
-    t->child[0] = exp();
+    t->child[0] = add_oper();
   }
   match(SEMI);
   return t;
@@ -490,9 +532,14 @@ TreeNode * if_stmt(void)
 { TreeNode * t = newStmtNode(IfK);
   match(IF);
   match(LPAREN);
-  if (t!=NULL) t->child[0] = exp();
+
+  printToken(token,tokenString);
+  if (t!=NULL) t->child[0] = add_oper(); 
+  printf("%d\n", t->child[0]->sibling->attr.val);
   match(RPAREN);
+  
   if (t!=NULL) t->child[1] = stmt_declare();
+  printf("%s\n", t->child[1]->attr.name);
   if (token==ELSE) {
     match(ELSE);
     if (t!=NULL) t->child[2] = stmt_declare();
@@ -504,7 +551,7 @@ TreeNode * repeat_stmt(void)
 { TreeNode * t = newStmtNode(RepeatK);
   match(WHILE);
   match(LPAREN);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = tempa();
   match(RPAREN);
   if (t!=NULL) t->child[1] = stmt_declare();
   return t;
@@ -516,7 +563,7 @@ TreeNode * assign_stmt(void)
     t->attr.name = copyString(tokenString);
   match(ID);
   match(ASSIGN);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = tempa();
   return t;
 }
 
@@ -532,64 +579,25 @@ TreeNode * read_stmt(void)
 TreeNode * write_stmt(void)
 { TreeNode * t = newStmtNode(WriteK);
   match(WRITE);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = tempa();
   return t;
 }
 
-TreeNode * exp_list(void){
-  TreeNode * t = NULL;
-  if(token == SEMI){
-    match(SEMI);
-  }
-  else if(token != RBRAC){
-    t = exp();
-    match(SEMI);
-  }
-  return t;
-}
-TreeNode * exp(void)
-{ TreeNode * t;
-  TreeNode * q = NULL;
-  int id = 0;
-  if(token == ID){
-    q = call();
-    id = 1;
-  }    
-  if(id && token == ASSIGN){
-    if(q != NULL && q->nodekind == ExpK && q->kind.exp == IdK)
-        match(ASSIGN);
-        t =newStmtNode(AssignK);
-        if(t!=NULL){
-        t->child[0] = q;
-        t->child[1] = exp();
-      }
-      else{
-        syntaxError("attempt to assign to something not an lvalue\n");
-			token = getToken();
-      }
-      
-  }
-  else {
-        t = simple_exp(q);
-      }
-  return t;
-}
-TreeNode * simple_exp(TreeNode *g){
-  TreeNode * t = add_exp(g);
-  TreeNode * p;
+
+TreeNode * simple_exp(void){printf("sim");
+  TreeNode * t = add_oper();
+  
+  TreeNode * p = newExpNode(SimpK);
   TokenType temp;
-  if ((token==LT)||(token==EQ)||(token == RT)||(token == REQ)||(token == LEQ)) {
-    temp = token;
-    match(token);
-     p = newExpNode(OpK);
-    if (p!=NULL) {
-      p->child[0] = t;
-      p->child[1] = add_exp(NULL);
-      p->attr.op = temp;
-     
+  if ((token==LT)||(token==ASSIGN)||(token == RT)||(token == REQ)||(token == LEQ)) {
+    if (t!=NULL) {
+      p->attr.op = token;
+      t->sibling = p;
     }
+    match(token);
+    if (t!=NULL)
+      p->sibling = add_oper();
   }
-  else  t = p;
   return t;
 }
 
@@ -638,12 +646,11 @@ if(g != NULL) return g;
     case ID :
       t = newExpNode(IdK);
       if ((t!=NULL) && (token==ID))
-        t = call();
-      //match(ID);
+      match(ID);
       break;
     case LPAREN :
       match(LPAREN);
-      t = exp();
+      t = tempa();
       match(RPAREN);
       break;
     default:
@@ -654,56 +661,7 @@ if(g != NULL) return g;
     }
   return t;
 }
-TreeNode * call(void){
-  TreeNode * t;
-  char * name;
-  if(token == ID) name = copyString(tokenString);
 
-  match(ID);
-
-  if(token == LPAREN){
-    match(LPAREN);
-    t = newStmtNode(CallK);
-    if(t != NULL){
-    t->attr.name = name;
-    t->child[0] = args();
-    }
-    match(RPAREN);
-  }
-  else{
-    t = newExpNode(IdK);
-    if(t != NULL){
-    t->attr.name = name;
-    t->type = Integer;
-    }
-  }
-  return t;
-}
-TreeNode *args(void){
-  if(token == RPAREN){
-    return NULL;
-  }
-  else{
-    TreeNode * t = exp();
-    TreeNode * p = t;
-    if(t != NULL){
-      while (token == COMMA)
-      { TreeNode * q;
-          match(COMMA);
-          q = exp();
-          //if(ERROR) return;
-          if (q!=NULL) {
-            if (t==NULL) t = p = q;
-            else /* now p cannot be NULL either */
-            { p->sibling = q;
-              p = q;
-            }
-          }
-      }
-    }
-  return t;
-  }
-}
 /****************************************/
 /* the primary function of the parser   */
 /****************************************/

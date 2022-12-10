@@ -1,6 +1,7 @@
 
 TINY COMPILATION: test0.c
-
+Syntax error at line 5: !!unexpected token -> 	}	}
+      
 Syntax tree:
     Variable Declaration: a
         Type: int
@@ -11,18 +12,13 @@ Syntax tree:
         Parameter: a
             Type: int
         Compound statment
-            Assign : =
-                Variable : a
+            Return Statement :
+                Simple Expression
+                Operator: >=
+                Variable: a
+                Multiple Expression
+                Operator: *
+                Variable: d
                 Addictive Expression
-                    Variable: a
-                    Operator: +
-                    Constant: 1
-                    Multiple Expression
-                        Operator: *
-                        Constant: 4
-                        Addictive Expression
-                            Operator: +
-                            Constant: 46
-                            Multiple Expression
-                                Operator: /
-                                Variable: k
+                Operator: +
+                Constant: 44
