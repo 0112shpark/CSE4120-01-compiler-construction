@@ -191,6 +191,9 @@ void printTree( TreeNode * tree )
           //printSpaces();
           fprintf(listing,"Return Statement :\n");
           break;
+        case CallK:
+          fprintf(listing, "Call parameters: \n");
+          break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
           break;
@@ -283,7 +286,6 @@ void printTree( TreeNode * tree )
           switch(tree->type){
             case Integer: 
               fprintf(listing, "Parameter: %s\n", tree->attr.name);
-              
               printSpaces();
               fprintf(listing, "Type: int\n");
               break;
@@ -322,10 +324,12 @@ void printTree( TreeNode * tree )
           fprintf(listing, "Constant: %d\n", tree->attr.val);
           //UNINDENT;
           break;
-        case SimpK:
+        case SimpIK:
           //printSpaces();
           fprintf(listing, "Simple Expression\n");
           //INDENT;
+          printSpaces();
+          fprintf(listing, "Variable: %s\n", tree->simp_name);
           printSpaces();
           fprintf(listing, "Operator: ");
           switch(tree->attr.op){
@@ -348,6 +352,83 @@ void printTree( TreeNode * tree )
                 fprintf(listing,"!=\n");
                 break;
           }
+          
+          //UNINDENT;
+          break;
+        case SimpNK:
+          //printSpaces();
+          fprintf(listing, "Simple Expression\n");
+          //INDENT;
+          printSpaces();
+          fprintf(listing, "Constant: %d\n", tree->simp_val);
+          printSpaces();
+          fprintf(listing, "Operator: ");
+          switch(tree->attr.op){
+              case LT : 
+                fprintf(listing,">\n");
+                break;
+              case RT : 
+                fprintf(listing,"<\n");
+                break;
+              case LEQ : 
+                fprintf(listing,"<=\n");
+                break;
+              case REQ : 
+                fprintf(listing,">=\n");
+                break;
+              case ASSIGN : 
+                fprintf(listing,"==\n");
+                break;
+              case NEQ : 
+                fprintf(listing,"!=\n");
+                break;
+          }
+          
+          //UNINDENT;
+          break;
+        case AddSI:
+          //printSpaces();
+          fprintf(listing, "Addictive operation\n");
+          //INDENT;
+          printSpaces();
+          fprintf(listing, "variable: %s\n", tree->simp_name);
+          printSpaces();
+          fprintf(listing, "Operator: ");
+           if(tree->attr.op == PLUS){
+              fprintf(listing,"+\n");
+            }
+            else if(tree->attr.op == MINUS){
+              fprintf(listing,"-\n");
+            }
+            else if(tree->attr.op == TIMES){
+              fprintf(listing,"*\n");
+            }
+            else if(tree->attr.op == OVER){
+              fprintf(listing,"/\n");
+            }
+          
+          //UNINDENT;
+          break;
+        case MulSI:
+          //printSpaces();
+          fprintf(listing, "Multiple operation\n");
+          //INDENT;
+          printSpaces();
+          fprintf(listing, "variable: %s\n", tree->simp_name);
+          printSpaces();
+          fprintf(listing, "Operator: ");
+          if(tree->attr.op == PLUS){
+              fprintf(listing,"+\n");
+            }
+            else if(tree->attr.op == MINUS){
+              fprintf(listing,"-\n");
+            }
+            else if(tree->attr.op == TIMES){
+              fprintf(listing,"*\n");
+            }
+            else if(tree->attr.op == OVER){
+              fprintf(listing,"/\n");
+            }
           
           //UNINDENT;
           break;

@@ -1,7 +1,9 @@
 
 TINY COMPILATION: test0.c
-Syntax error at line 5: !!unexpected token -> 	}	}
-      
+	>=	>=
+	>=	>=
+	>=	>=
+
 Syntax tree:
     Variable Declaration: a
         Type: int
@@ -14,6 +16,7 @@ Syntax tree:
         Compound statment
             Return Statement :
                 Simple Expression
+                Variable: a
                 Operator: >=
                 Variable: a
                 Multiple Expression

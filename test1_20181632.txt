@@ -1,92 +1,17 @@
 
 TINY COMPILATION: test1.c
-
->>> Syntax error at line 1: !!unexpected token -> 	(	(
+Syntax error at line 4: syntax error
+Current token: 		;	;
+Syntax error at line 4: !!unexpected token -> 	;	;
+      Syntax error at line 4: syntax error
+stCurrent token: 		)	)
+Syntax error at line 7: !!unexpected token -> 	}	}
       
->>> Syntax error at line 1: **unexpected token -> 	(	(
-
->>> Syntax error at line 1: !!unexpected token -> 	VOID	void
-      
->>> Syntax error at line 1: !!unexpected token -> 	)	)
-      
->>> Syntax error at line 1: !!unexpected token -> 	)	)
-      
->>> Syntax error at line 1: **unexpected token -> 	)	)
-
->>> Syntax error at line 2: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 2: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 2: !!unexpected token -> 	{	{
-      
->>> Syntax error at line 2: **unexpected token -> 	{	{
-
->>> Syntax error at line 3: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 3: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 3: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 3: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 3: !!unexpected token -> 	INT	int
-      
->>> Syntax error at line 4: !!unexpected token -> 	(	(
-      
->>> Syntax error at line 4: unexpected token -> 	;	;
-
->>> Syntax error at line 4: !!unexpected token -> 	{	{
-      
->>> Syntax error at line 4: **unexpected token -> 	{	{
-
->>> Syntax error at line 5: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 5: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 5: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 5: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 5: !!unexpected token -> 	ID	break
-      
->>> Syntax error at line 5: !!unexpected token -> 	;	;
-      
->>> Syntax error at line 5: unexpected token -> 	;	;
-
->>> Syntax error at line 6: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 6: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 6: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 6: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 6: !!unexpected token -> 	}	}
-      
->>> Syntax error at line 6: **unexpected token -> 	}	}
-
->>> Syntax error at line 7: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 7: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 7: !!unexpected token -> 	}	}
-      
->>> Syntax error at line 7: **unexpected token -> 	}	}
-
->>> Syntax error at line 8: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 8: **unexpected token -> Unknown token: 37
-
->>> Syntax error at line 9: !!unexpected token -> Unknown token: 37
-      
->>> Syntax error at line 9: **unexpected token -> Unknown token: 37
-
 Syntax tree:
-  Variable Declare : main
-      Type : void
-  Variable Declare : )
-      Type : void
-  Variable Declare : a
-      Type : int
-  Assign to: for
-  Assign to: break
+    Function Declaration: main
+        Type: void
+                Compound statment
+            Variable Declaration: a
+                Type: int
+            Call parameters: 
+            Compound statment

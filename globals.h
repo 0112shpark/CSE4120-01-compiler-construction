@@ -48,7 +48,7 @@ extern int lineno; /* source line number for listing */
 
 typedef enum {StmtK,ExpK} NodeKind;
 typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK,CallK, ReturnK,CompK} StmtKind;
-typedef enum {OpK,ConstK,IdK, VarK, FuncK, ArrK, ParamK, AddIK, AddCK, MulIK, MulCK, AddK, SimpK} ExpKind;
+typedef enum {OpK,ConstK,IdK, VarK, FuncK, ArrK, ParamK, AddIK, AddCK, MulIK, MulCK, AddK, SimpIK, SimpNK, AddSI, MulSI} ExpKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer,Boolean, MtA,AtM} ExpType;
@@ -66,6 +66,8 @@ typedef struct treeNode
              char * name; } attr;
      ExpType type; /* for type checking of exps */
      int arr_size;
+     char * simp_name;
+     int simp_val;
    } TreeNode;
 
 /**************************************************/

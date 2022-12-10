@@ -1,0 +1,46 @@
+
+TINY COMPILATION: test2.c
+
+Syntax tree:
+    Function Declaration: main
+        Type: void
+                Compound statment
+            Variable Declaration: a
+                Type: int
+            Variable Declaration: b
+                Type: int
+            Variable Declaration: c
+                Type: int
+            Variable Declaration: d
+                Type: int
+            Variable Declaration: e
+                Type: int
+            If
+                Simple Expression
+                Variable: a
+                Operator: !=
+                Constant: 1
+                If
+                    Simple Expression
+                    Variable: b
+                    Operator: !=
+                    Constant: 2
+                    If
+                        Simple Expression
+                        Variable: c
+                        Operator: !=
+                        Constant: 3
+                        If
+                            Simple Expression
+                            Variable: d
+                            Operator: ==
+                            Constant: 4
+                            Assign : =
+                                Variable : e
+                                Constant: 5
+                            Assign : =
+                                Variable : e
+                                Constant: 4
+            Call parameters: 
+                Variable: ar
+                Variable: dd
