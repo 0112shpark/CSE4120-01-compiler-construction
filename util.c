@@ -75,6 +75,10 @@ void printToken( TokenType token, const char* tokenString )
       fprintf(listing,
           "\tERROR\t%s\n",tokenString);
       break;
+    case TOKENERR:
+      fprintf(listing,
+          "\t%s\t%s\n",tokenString,tokenString);
+      break;
     default: /* should never happen */
       fprintf(listing,"Unknown token: %d\n",token);
   }
@@ -138,8 +142,8 @@ char * copyString(char * s)
 static indentno = 0;
 
 /* macros to increase/decrease indentation */
-#define INDENT indentno+=2
-#define UNINDENT indentno-=2
+#define INDENT indentno+=4
+#define UNINDENT indentno-=4
 
 /* printSpaces indents by printing spaces */
 static void printSpaces(void)
@@ -165,13 +169,23 @@ void printTree( TreeNode * tree )
           fprintf(listing,"Repeat\n");
           break;
         case AssignK:
-          fprintf(listing,"Assign to: %s\n",tree->attr.name);
+          //UNINDENT;
+          //printSpaces();
+          fprintf(listing,"Assign : =\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Variable : %s\n", tree->attr.name);
+          
+          UNINDENT;
           break;
         case ReadK:
           fprintf(listing,"Read: %s\n",tree->attr.name);
           break;
         case WriteK:
           fprintf(listing,"Write\n");
+          break;
+        case CompK:
+          fprintf(listing, "Compound statment\n");
           break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");
@@ -181,14 +195,103 @@ void printTree( TreeNode * tree )
     else if (tree->nodekind==ExpK)
     { switch (tree->kind.exp) {
         case OpK:
-          fprintf(listing,"Op: ");
-          printToken(tree->attr.op,"\0");
+          //printSpaces();
+          fprintf(listing,"Operator: ");
+          if(tree->attr.op == PLUS){
+            fprintf(listing,"+\n");
+          }
+          else if(tree->attr.op == MINUS){
+            fprintf(listing,"-\n");
+          }
+          else if(tree->attr.op == TIMES){
+            fprintf(listing,"*\n");
+          }
+          else if(tree->attr.op == OVER){
+            fprintf(listing,"/\n");
+          }
+          //printToken(tree->attr.op,"\0");
           break;
         case ConstK:
-          fprintf(listing,"Const: %d\n",tree->attr.val);
+          //printSpaces();
+          fprintf(listing,"Constant: %d\n",tree->attr.val);
           break;
         case IdK:
-          fprintf(listing,"Id: %s\n",tree->attr.name);
+          //printSpaces();
+          fprintf(listing,"Variable: %s\n",tree->attr.name);
+          break;
+        case VarK:
+          fprintf(listing, "Variable Declaration: %s\n", tree->attr.name);
+          INDENT;
+          printSpaces();
+          switch(tree->type){
+            case Integer: fprintf(listing, "Type: int\n");break;
+            case Void: fprintf(listing, "Type: void\n");break;
+          }
+          UNINDENT;
+          break;
+        case FuncK:
+          fprintf(listing, "Function Declaration: %s\n", tree->attr.name);
+          INDENT;
+          printSpaces();
+          switch(tree->type){
+            case Integer: fprintf(listing, "Type: int\n");break;
+            case Void: fprintf(listing, "Type: void\n");break;
+          }
+          UNINDENT;
+          break;
+        case ArrK:
+          fprintf(listing, "Variable Declaration: %s[%d]\n", tree->attr.name, tree->arr_size);
+            INDENT;
+            printSpaces();
+            switch(tree->type){
+              case Integer: fprintf(listing, "Type: int\n");break;
+              case Void: fprintf(listing, "Type: void\n");break;
+            }
+            UNINDENT;
+            break;
+        case ParamK:
+          INDENT;
+          switch(tree->type){
+            case Integer: 
+              fprintf(listing, "Parameter: %s\n", tree->attr.name);
+              
+              printSpaces();
+              fprintf(listing, "Type: int\n");
+              break;
+            }
+            UNINDENT;
+            break;
+        case AddIK:
+          //printSpaces();
+          fprintf(listing, "Addictive Expression\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Variable: %s\n", tree->attr.name);
+          //UNINDENT;
+          break;
+        case AddCK:
+          //printSpaces();
+          fprintf(listing, "Addictive Expression\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Constant: %d\n", tree->attr.val);
+          //UNINDENT;
+          break;
+        case MulIK:
+          //printSpaces();
+          fprintf(listing, "Multiple Expression\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Variable: %s\n", tree->attr.name);
+          //UNINDENT;
+          break;
+        case MulCK:
+          //printSpaces();
+          fprintf(listing, "Mulpiple Expression\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Constant: %d\n", tree->attr.val);
+          //UNINDENT;
           break;
         default:
           fprintf(listing,"Unknown ExpNode kind\n");

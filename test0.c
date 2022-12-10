@@ -1,6 +1,7 @@
 int a;
 
-void main(int arg){
-	a = a + 1;
+int main(int arg, int a){
+	
+	a = a *1 +3;
 }
 

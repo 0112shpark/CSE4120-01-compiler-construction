@@ -27,7 +27,7 @@
 
 typedef enum 
     /* book-keeping tokens */
-   {ENDFILE,ERROR, CMTERR,LEXERR,
+   {ENDFILE,ERROR, CMTERR,LEXERR,TOKENERR,
     /* reserved words */
     IF,THEN,ELSE,END,REPEAT,UNTIL,READ,WRITE,VOID,WHILE,INT,RETURN,
     /* multicharacter tokens */
@@ -47,8 +47,8 @@ extern int lineno; /* source line number for listing */
 /**************************************************/
 
 typedef enum {StmtK,ExpK} NodeKind;
-typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK} StmtKind;
-typedef enum {OpK,ConstK,IdK} ExpKind;
+typedef enum {IfK,RepeatK,AssignK,ReadK,WriteK,CallK, ReturnK,CompK} StmtKind;
+typedef enum {OpK,ConstK,IdK, VarK, FuncK, ArrK, ParamK, AddIK, AddCK, MulIK, MulCK} ExpKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer,Boolean} ExpType;
@@ -65,6 +65,7 @@ typedef struct treeNode
              int val;
              char * name; } attr;
      ExpType type; /* for type checking of exps */
+     int arr_size;
    } TreeNode;
 
 /**************************************************/
