@@ -265,7 +265,6 @@ TreeNode *tempa(void){
       t->child[0] = add_oper();
     }
     else if(token == LPAREN){
-      printf("dd");
       match(LPAREN);
       t = newStmtNode(CallK);
       t->child[0]=callparam();
