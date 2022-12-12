@@ -1,0 +1,36 @@
+
+TINY COMPILATION: test0.c
+
+Syntax tree:
+    Variable Declaration: a
+        Type: int
+    Function Declaration: main
+        Type: int
+        Parameter: arg
+            Type: int
+        Parameter: a
+            Type: int
+        Compound statment
+            Assign : =
+                Variable : a[20]
+                Multiple Expression
+                Variable: a
+                Operator: *
+                Variable: d
+                Array Declaration: d
+                    Addictive Expression
+                    Variable: d
+                    Operator: -
+                    Variable: d
+                Operator: +
+                Variable: b
+                Array Declaration: e
+                    Multiple Expression
+                    Variable: e
+                    Operator: *
+                    Variable: d
+                Operator: *
+                Variable: b
+                Addictive Expression
+                Operator: +
+                Variable: f

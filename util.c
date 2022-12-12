@@ -178,6 +178,16 @@ void printTree( TreeNode * tree )
           
           UNINDENT;
           break;
+        case AssignKarr:
+          //UNINDENT;
+          //printSpaces();
+          fprintf(listing,"Assign : =\n");
+          INDENT;
+          printSpaces();
+          fprintf(listing, "Variable : %s[%d]\n", tree->attr.name, tree->arr_size);
+          
+          UNINDENT;
+          break;
         case ReadK:
           fprintf(listing,"Read: %s\n",tree->attr.name);
           break;
@@ -280,6 +290,10 @@ void printTree( TreeNode * tree )
               case Void: fprintf(listing, "Type: void\n");break;
             }
             UNINDENT;
+            break;
+        case ArrexpK:
+          fprintf(listing, "Array Declaration: %s\n", tree->attr.name);
+            
             break;
         case ParamK:
           INDENT;

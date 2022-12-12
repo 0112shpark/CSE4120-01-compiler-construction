@@ -42,6 +42,7 @@ static TreeNode * add_op(void);
 static TreeNode * mul_op(void);
 static TreeNode * sim_op(void);
 static TreeNode * callparam(void);
+TreeNode * arr_op(void);
 int flag =0;
 int add_mul_flag = 0;
 
@@ -172,6 +173,10 @@ TreeNode *param(void){
       t->type = Integer;
       t->attr.name = copyString(tokenString);
       match(ID);
+      if(token == LSQBRAC){
+        match(LSQBRAC);
+        match(RSQBRAC);
+      }
       if(token == COMMA) {
         match(COMMA);
         q =param();
@@ -275,6 +280,16 @@ TreeNode *tempa(void){
       t->child[0]=callparam();
       match(RPAREN);
     }
+    else if(token == LSQBRAC){
+      t = newStmtNode(AssignKarr);
+      t->attr.name = name;
+      match(LSQBRAC);
+      t->arr_size = atoi(tokenString);
+      match(NUM);
+      match(RSQBRAC);
+      match(EQ);
+      t->child[0] = add_oper();
+    }
   }
  return t;
 }
@@ -313,6 +328,23 @@ TreeNode * add_oper(void){
       q = sim_op();
       t->sibling = q;
     }
+    else if(token == LSQBRAC){
+      t = newExpNode(ArrexpK);
+      t->attr.name = name;
+      match(LSQBRAC);
+      q = add_oper();
+      t->child[0] = q;
+      match(RSQBRAC);
+      if((token == PLUS)||(token ==MINUS)){
+        q = add_op();
+        t->sibling = q;
+      }
+      if((token == TIMES)||(token ==OVER)){
+      
+      q = mul_op();
+      t->sibling = q;
+    }
+    }
   }
   else if(token == NUM){
     int temp = atoi(tokenString);
@@ -328,6 +360,7 @@ TreeNode * add_oper(void){
         t = newExpNode(AddCK);
         t->attr.val = temp;
         q = add_op();
+
         t->sibling = q;
       }
       else if((token == TIMES)||(token ==OVER)){
@@ -372,9 +405,11 @@ TreeNode * sim_op(void){
     if(token!= SEMI){
       add_mul_flag = 2;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
+      else if(token == LSQBRAC) t->sibling = arr_op();
       else t->sibling = add_op();
     }
   }
+  
   return t;
 }
 TreeNode * add_op(void){
@@ -404,8 +439,10 @@ TreeNode * add_op(void){
     if(token == RPAREN) match(RPAREN);
     flag = 0;
     if(token!= SEMI){
+     
       flag = 0;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
+      else if(token == LSQBRAC){t->sibling = arr_op();}
       else t->sibling = add_op();
     }
     
@@ -426,6 +463,31 @@ TreeNode * add_op(void){
   return t;
 }
 
+TreeNode * arr_op(void){
+  TreeNode * t = NULL;
+  TreeNode * q;
+
+
+  if(token == LSQBRAC){
+      match(LSQBRAC);
+      t = newExpNode(ArrexpK);
+      t->attr.name = copyString(tokenString);
+      
+      q = add_oper();
+      t->child[0] = q;
+      match(RSQBRAC);
+      if((token == PLUS)||(token ==MINUS)){
+        q = add_op();
+        t->sibling = q;
+      }
+      if((token == TIMES)||(token ==OVER)){
+      
+      q = mul_op();
+      t->sibling = q;
+    }
+    }
+    return t;
+}
 TreeNode * mul_op(void){
   TreeNode * t;
   TreeNode *q;
@@ -452,6 +514,7 @@ TreeNode * mul_op(void){
     if(token!= SEMI){
       flag = 0;
       if((token == TIMES)||(token ==OVER)) t->sibling = mul_op();
+      else if(token == LSQBRAC) t->sibling = arr_op();
       else t->sibling = add_op();
     }
   }

@@ -1,5 +1,8 @@
 int a;
 
-int main(int arg, int a){
-return a >= a*(d+44);
+int main(int arg, int a[]){
+    
+    a[20] = a*d[d-d] + b[e*d] * b +f;
+
+
 }
