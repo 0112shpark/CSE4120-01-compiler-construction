@@ -2,16 +2,5 @@
 TINY COMPILATION: test1.c
 Syntax error at line 4: syntax error
 Current token: 		;	;
-Syntax error at line 4: !!unexpected token -> 	;	;
-      Syntax error at line 4: syntax error
-stCurrent token: 		)	)
-Syntax error at line 7: !!unexpected token -> 	}	}
-      
+
 Syntax tree:
-    Function Declaration: main
-        Type: void
-                Compound statment
-            Variable Declaration: a
-                Type: int
-            Call parameters: 
-            Compound statment

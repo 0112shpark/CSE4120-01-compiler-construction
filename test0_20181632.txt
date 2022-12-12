@@ -1,8 +1,5 @@
 
 TINY COMPILATION: test0.c
-	>=	>=
-	>=	>=
-	>=	>=
 
 Syntax tree:
     Variable Declaration: a

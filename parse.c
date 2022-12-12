@@ -48,6 +48,10 @@ int add_mul_flag = 0;
 static void syntaxError(char * message)
 { //fprintf(listing,"\n>>> ");
   fprintf(listing,"Syntax error at line %d: %s",lineno,message);
+  fprintf(listing,"Current token: \t");
+  printToken(token,tokenString);
+  fprintf(listing,"\nSyntax tree:\n");
+  exit(-1);
   Error = TRUE;
 
 }
@@ -186,7 +190,7 @@ TreeNode *param(void){
 
 }
 TreeNode * callparam(void){
-  TreeNode * t = NULL;
+  TreeNode * t =NULL;
   TreeNode * q;
   //match(token);
   switch(token){
@@ -265,6 +269,7 @@ TreeNode *tempa(void){
       t->child[0] = add_oper();
     }
     else if(token == LPAREN){
+    
       match(LPAREN);
       t = newStmtNode(CallK);
       t->child[0]=callparam();

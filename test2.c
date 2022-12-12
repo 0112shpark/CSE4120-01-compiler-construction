@@ -13,6 +13,6 @@ void main(void)
 					e = 5;
 				else
 					e = 4;
-	hellr(ar,dd);
+
 }
 

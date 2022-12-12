@@ -41,6 +41,3 @@ Syntax tree:
                             Assign : =
                                 Variable : e
                                 Constant: 4
-            Call parameters: 
-                Variable: ar
-                Variable: dd
