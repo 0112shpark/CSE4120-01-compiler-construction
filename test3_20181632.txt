@@ -1,0 +1,5 @@
+
+TINY COMPILATION: test3.c
+Syntax error at line 18: !!unexpected token -> Current token: 		ID	v
+
+Syntax tree:
